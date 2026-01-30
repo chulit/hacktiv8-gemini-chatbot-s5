@@ -32,8 +32,8 @@ A modern, lightweight chatbot application that interfaces with the Google Gemini
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/gemini-chatbot.git
-cd gemini-chatbot
+git clone https://github.com/chulit/hacktiv8-gemini-chatbot-s5.git
+cd hacktiv8-gemini-chatbot-s5
 ```
 
 ### 2. Install Dependencies
