@@ -18,6 +18,15 @@
     background-color: #cbd5e1;
 }
 
+/* Dark Mode Scrollbar */
+.dark #chat-box::-webkit-scrollbar-thumb {
+    background-color: #4b5563; /* gray-600 */
+}
+
+.dark #chat-box::-webkit-scrollbar-thumb:hover {
+    background-color: #6b7280; /* gray-500 */
+}
+
 /* Typing Indicator Animation */
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
@@ -70,6 +79,11 @@
     font-size: 0.9em;
 }
 
+.dark .prose code {
+    background-color: #374151; /* gray-700 */
+    color: #f87171; /* red-400 */
+}
+
 .prose pre {
     background-color: #1e293b;
     color: #e2e8f0;
@@ -77,6 +91,11 @@
     border-radius: 8px;
     overflow-x: auto;
     margin: 0.8em 0;
+}
+
+.dark .prose pre {
+    background-color: #111827; /* gray-900 */
+    border: 1px solid #374151; /* gray-700 */
 }
 
 .prose pre code {
@@ -95,10 +114,18 @@
     text-decoration: underline;
 }
 
+.dark .prose a {
+    color: #60a5fa; /* blue-400 */
+}
+
 .prose h1, .prose h2, .prose h3 {
     font-weight: 700;
     margin: 0.8em 0 0.4em 0;
     color: #111827;
+}
+
+.dark .prose h1, .dark .prose h2, .dark .prose h3 {
+    color: #f3f4f6; /* gray-100 */
 }
 
 .prose h1 { font-size: 1.5em; }

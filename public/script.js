@@ -6,8 +6,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuBtn = document.getElementById('menu-btn');
   const menuDropdown = document.getElementById('menu-dropdown');
   const clearChatBtn = document.getElementById('clear-chat-btn');
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
   if (!form || !chatBox || !userInput) return;
+
+  // --- Theme Toggle Logic ---
+  // Check local storage or system preference
+  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+
+  themeToggleBtn?.addEventListener('click', () => {
+    if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+    } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+    }
+    // Close menu after toggle for better UX
+    menuDropdown?.classList.add('hidden');
+  });
+  // --------------------------
 
   // Toggle Menu
   menuBtn?.addEventListener('click', (e) => {
@@ -24,23 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Clear Chat
   clearChatBtn?.addEventListener('click', () => {
-    // Keep the welcome message if you want, or remove everything.
-    // Let's remove everything except the very first welcome message if it exists, 
-    // or just clear the chat box container content but keep the structure.
-    // Simpler: clear all children of chatBox.
     chatBox.innerHTML = '';
     
     // Optional: Restore welcome message
     const welcomeHTML = `
       <div class="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 text-indigo-600">
+        <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 text-indigo-600 dark:text-indigo-400">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
         </div>
         <div class="flex flex-col gap-1 max-w-[85%]">
-          <span class="text-xs text-gray-500 ml-1 font-medium">Gemini</span>
-          <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm text-sm text-gray-700 leading-relaxed">
+          <span class="text-xs text-gray-500 dark:text-gray-400 ml-1 font-medium">Gemini</span>
+          <div class="bg-white dark:bg-gray-800 p-3.5 rounded-2xl rounded-tl-none border border-gray-100 dark:border-gray-700 shadow-sm text-sm text-gray-700 dark:text-gray-200 leading-relaxed transition-colors duration-200">
             Conversation cleared. Ready for a new topic!
           </div>
         </div>
@@ -119,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (error) {
       console.error('Error fetching chat response:', error);
-      botMessageElement.textContent = 'Failed to get response from server.';
+      botMessageElement.textContent = 'Oops! Something went wrong. Please check the error notification.';
       showToast(error.message || 'Failed to connect to server', 'error');
     } finally {
       scrollToBottom(chatBox);
@@ -197,14 +215,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       // Bot message
       messageWrapper.innerHTML = `
-        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 text-indigo-600">
+        <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 text-indigo-600 dark:text-indigo-400">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
         </div>
         <div class="flex flex-col gap-1 max-w-[85%]">
-          <span class="text-xs text-gray-500 ml-1 font-medium">Gemini</span>
-          <div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm text-sm text-gray-700 leading-relaxed prose">
+          <span class="text-xs text-gray-500 dark:text-gray-400 ml-1 font-medium">Gemini</span>
+          <div class="bg-white dark:bg-gray-800 p-3.5 rounded-2xl rounded-tl-none border border-gray-100 dark:border-gray-700 shadow-sm text-sm text-gray-700 dark:text-gray-200 leading-relaxed prose transition-colors duration-200">
             ${text}
           </div>
         </div>
@@ -217,7 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Return the text container element so we can update it later (for the bot "Thinking..." state)
     // For bot, it is the last div inside the wrapper's last child
     if (sender === 'bot') {
-        return messageWrapper.querySelector('.bg-white');
+        // Need to target the bubble specifically. 
+        // In the HTML structure above, it is the second child of the second child (wrapper -> flex-col -> bubble)
+        return messageWrapper.querySelector('.prose') || messageWrapper.querySelector('.bg-white');
     }
     return messageWrapper;
   }
