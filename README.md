@@ -2,7 +2,7 @@
 
 A modern, lightweight chatbot application that interfaces with the Google Gemini API. Built with Node.js, Express, and a vanilla JavaScript frontend styled with Tailwind CSS.
 
-![Gemini Chatbot UI](https://via.placeholder.com/800x450?text=Gemini+Chatbot+Preview) 
+![Gemini Chatbot UI](./screenshot.png) 
 *(Replace with actual screenshot if available)*
 
 ## Features
