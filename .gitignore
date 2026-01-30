@@ -23,3 +23,7 @@ build/
 .vscode/
 .idea/
 *.swp
+
+# Logs
+logs/*.log
+!logs/.gitkeep
